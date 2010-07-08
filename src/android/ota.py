@@ -4,7 +4,7 @@ import zipfile
 class FileNotOpenedException():
     pass
 
-class AndroidOTA(object):
+class OTA(object):
     def __init__(self, filename = None):
         self.filename = filename
         self.buildprops = {}
@@ -43,6 +43,6 @@ class AndroidOTA(object):
         return self.getBuildProp("ro.product.device")
 
 if __name__ == "__main__":
-    ota = AndroidOTA()
+    ota = OTA()
     ota.open()
     ota.getModVersion()
