@@ -1,3 +1,5 @@
 .project
 .pydevproject
 *.pyc
+boot.img
+python_android.egg-info
