@@ -3,6 +3,7 @@ from binascii import hexlify
 
 class BootImage(object):
     def __init__(self, filename="boot.img"):
+        self.filename = filename
         self._fd = open(filename, "r")
         self._header = self._fd.read(584)
         
@@ -28,9 +29,25 @@ class BootImage(object):
     def getKernelBase(self):
         return str("%#x" % self.kernel_addr)
     
+    def getKernelSize(self):
+        return self.kernel_size
+    
+    def getRamdiskSize(self):
+        return self.ramdisk_size
+    
     def getRamdiskBase(self):
         return str("%#x" % self.ramdisk_addr)
     
+    def dump(self):
+        print "============================================="
+        print "Information about %s" % self.filename
+        print "============================================="
+        print "Kernel Size  : %s" % self.getKernelSize()
+        print "Kernel Base  : %s" % self.getKernelBase()
+        print "Ramdisk Size : %s" % self.getRamdiskSize()
+        print "Ramdisk Base : %s" % self.getRamdiskBase()
+        print "============================================="
+    
 if __name__ == '__main__':
     bi = BootImage()
-    print bi.getKernelBase()
+    bi.dump()
