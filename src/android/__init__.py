@@ -1,2 +1,2 @@
 from boot import BootImage
-from ota import OTA
+from ota import OTAPackage
