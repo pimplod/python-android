@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 from setuptools import setup, find_packages
 
@@ -39,11 +39,15 @@ setup (
        packages=find_packages('src'),
        package_dir={'':'src'},
 
-       install_requires=[],
+       install_requires=[
+                "nose>=0.11",
+                "coverage"
+        ],
 
        entry_points={
             'console_scripts':[
                 "bootinfo = android.command:main",
             ]
        },
+       test_suite='nose.collector',
 )

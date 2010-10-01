@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from android.exc import FileNotFoundException
+from android.tests.mockzip import MockZip
 import os.path
 import re
 import zipfile
@@ -23,12 +25,26 @@ RE_BUILDPROP = re.compile(r'^(.*)=(.*)$')
 class OTAPackage(object):
     def __init__(self, file):
         self.file = file
-        self.load_build_prop()
+        self.test = False
 
-    def load_build_prop(self):
-        fd = zipfile.ZipFile(self.file)
-        bp = fd.read("system/build.prop")
-        fd.close()
+        if isinstance(file, MockZip):
+            self.test = True
+
+        if not self.test and not os.path.exists(self.file):
+            raise FileNotFoundException("File '%s' not found!" % self.file)
+
+        self._loadfile()
+        self._load_buildprop()
+
+    def _loadfile(self):
+        if self.test:
+            self.fd = self.file
+        else:
+            self.fd = zipfile.ZipFile(self.file)
+
+    def _load_buildprop(self):
+        bp = self.fd.read("system/build.prop")
+        self.fd.close()
 
         self.build_prop = {}
 
@@ -83,4 +99,4 @@ class OTAPackage(object):
         return self.build_prop.get('ro.build.date', None)
 
 if __name__ == '__main__':
-    ab = OTAPackage("/home/ctso/Downloads/cm_dream_sapphire-09252010-001901.zip")
+    ab = OTAPackage("/home/ctso/cm.zip")
